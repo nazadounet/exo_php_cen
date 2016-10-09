@@ -15,18 +15,16 @@
         if(empty($_POST['cursus'])){
             $errors['cursus'] = "Veuillez votre cursus";
         }
-/*
-        if(empty($errors)){
-            $req  = $pdo->prepare("INSERT INTO info_etu SET firstname = ?, lastname = ?, email = ? , cursus = ?");
 
-            $req->execute([$_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['cursus']]);
-             echo 'ok';
+        if(empty($errors)){
+            $req  = $pdo->prepare("INSERT INTO info_etu SET firstname = ?, lastname = ?, email = ? , cursus = ?, competence = ?");
+
+            $req->execute([$_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['cursus'], $_POST['competence']]);
+
         }
-*/
-        
 
     }
-        var_dump($errors);
+
 ?>
 
 <!DOCTYPE html>
@@ -82,7 +80,14 @@
             <div class="form-group">
                 <label for="" class="col-sm-2 control-label">Cursus</label>
                 <div class="col-sm-10">
-                    <input type="text" class="form-control" name="cursus" placeholder="Password">
+                    <input type="text" class="form-control" name="cursus" placeholder="L3 CDNL, L3 Info-com...">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label for="" class="col-sm-2 control-label">Spécialité</label>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" name="competence" placeholder="Développeur, graphiste...">
                 </div>
             </div>
 
@@ -94,6 +99,26 @@
         </div>
     </form>
 
+    <div>
+        <?php
+            $req = $pdo->prepare("SELECT * FROM info_etu");
+            $req->execute();
+            $datas = $req->fetchAll(PDO::FETCH_OBJ);
+
+        ?>
+
+        <?php foreach($datas as $data): ?>
+
+            <p>
+                <strong>Nom : </strong><?= $data->firstname; ?>
+                <strong>Prénom : </strong><?= $data->lastname; ?>
+                <strong>Email : </strong><?= $data->email; ?>
+                <strong>cursus : </strong><?= $data->cursus; ?>
+                <strong>Spécialité : </strong><?= $data->competence; ?>
+
+            </p>
+        <?php endforeach?>
+    </div>
 
 </div><!-- /.container -->
 
