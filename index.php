@@ -1,4 +1,6 @@
 <?php require_once 'config.php';
+    require 'function.php';
+
     if(!empty($_POST)){
 
         $errors = array();
@@ -16,19 +18,33 @@
             $errors['cursus'] = "Veuillez votre cursus";
         }
 
-                    $req = $pdo->prepare("SELECT * FROM info_etu");
-                    $req->execute();
-                    $datas = $req->fetchAll(PDO::FETCH_OBJ);
+        $req = $pdo->prepare('SELECT * FROM info_etu');
+        $req->execute();
+        $user = $req->fetch(PDO::FETCH_ASSOC);
 
+        if($user['email'] == $_POST['email'])//si variable $user est vide alors l'email n'est pas deja pris.
+        {
+            $errors['email'] = "Cet email existe deja!";
+        }
 
         if(empty($errors)){
+
             $req  = $pdo->prepare("INSERT INTO info_etu SET firstname = ?, lastname = ?, email = ? , cursus = ?, competence = ?");
-
             $req->execute([$_POST['firstname'], $_POST['lastname'], $_POST['email'], $_POST['cursus'], $_POST['competence']]);
-
         }
 
     }
+debug($errors);
+
+$req = $pdo->prepare("SELECT * FROM info_etu");
+    $req->execute();
+    $datas = $req->fetchAll(PDO::FETCH_ASSOC);
+
+$req = $pdo->prepare("SELECT id FROM info_etu");
+    $req->execute();
+    $etuId = $req->fetchAll(PDO::FETCH_ASSOC);
+debug($etuId[0]);
+
 
 ?>
 
@@ -80,7 +96,7 @@
                     <div class="form-group">
                         <label for="" class="col-sm-2 control-label">Email</label>
                         <div class="col-sm-10">
-                            <input type="text" class="form-control" name="email" placeholder="Email">
+                            <input type="email" class="form-control" name="email" placeholder="Email">
                         </div>
                     </div>
                     <div class="form-group">
@@ -107,26 +123,28 @@
 
             <div>
 
-                <?php if(!empty($datas)): ?>
+                <?php if(!empty($datas)):?>
 
 
                     <table class="table table-hover">
                         <tr>
-                            <td>  </td>
+                            <td> <strong> id </strong> </td>
                             <td> <strong> Nom </strong> </td>
                             <td> <strong> Prénom </strong> </td>
                             <td> <strong> Email </strong> </td>
                             <td> <strong> Cursus </strong> </td>
                             <td> <strong> Spécialité </strong> </td>
+                            <td></td>
                         </tr>
                 <?php foreach($datas as $data): ?>
                         <tr>
-                            <td><?= $data->id; ?></td>
-                            <td><?= $data->firstname; ?></td>
-                            <td><?= $data->lastname; ?></td>
-                            <td><?= $data->email; ?></td>
-                            <td><?= $data->cursus; ?></td>
-                            <td><?= $data->competence; ?></td>
+                            <td><?= $data['id']; ?></td>
+                            <td><?= $data['firstname']; ?></td>
+                            <td><?= $data['lastname']; ?></td>
+                            <td><?= $data['email']; ?></td>
+                            <td><?= $data['cursus']; ?></td>
+                            <td><?= $data['competence']; ?></td>
+                            <td><a href="function.php?id=<?= $data['id'] ?>">Delete</a></td>
                         </tr>
                 <?php endforeach?>
                     </table>
