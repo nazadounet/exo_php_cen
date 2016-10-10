@@ -16,6 +16,11 @@
             $errors['cursus'] = "Veuillez votre cursus";
         }
 
+                    $req = $pdo->prepare("SELECT * FROM info_etu");
+                    $req->execute();
+                    $datas = $req->fetchAll(PDO::FETCH_OBJ);
+
+
         if(empty($errors)){
             $req  = $pdo->prepare("INSERT INTO info_etu SET firstname = ?, lastname = ?, email = ? , cursus = ?, competence = ?");
 
@@ -29,102 +34,113 @@
 
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="icon" href="../../favicon.ico">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+        <meta name="description" content="">
+        <meta name="author" content="">
+        <link rel="icon" href="../../favicon.ico">
 
-    <title>Starter Template for Bootstrap</title>
+        <title>Starter Template for Bootstrap</title>
 
-    <!-- Bootstrap core CSS -->
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
+        <!-- Bootstrap core CSS -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js">
 
-</head>
+    </head>
 
-<br/>
-<body>
-<header>
+    <br/>
+    <body>
+        <header>
 
-</header>
-<div class="container">
+        </header>
 
-    <form action="" method="post">
+        <div class="container">
 
-        <div class="form-inline">
-            <div class="form-group" style="margin-left: 70px;">
-                <label  class="col-sm-2 control-label" for="">Nom</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="firstname" placeholder="Votre nom">
+            <form action="" method="post">
+
+                <div class="form-inline">
+                    <div class="form-group" style="margin-left: 70px;">
+                        <label  class="col-sm-2 control-label" for="">Nom</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="firstname" placeholder="Votre nom">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label  class="col-sm-2 control-label" for="">Prénom</label>
+                        <div class="col-sm-10">
+                            <input style="margin-left: 13px;" type="text" class="form-control" name="lastname" placeholder="Votre prénom">
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="form-group">
-                <label  class="col-sm-2 control-label" for="">Prénom</label>
-                <div class="col-sm-10">
-                    <input style="margin-left: 13px;" type="text" class="form-control" name="lastname" placeholder="Votre prénom">
+                <br/>
+                <div class="form-horizontal">
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="email" placeholder="Email">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">Cursus</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="cursus" placeholder="L3 CDNL, L3 Info-com...">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="" class="col-sm-2 control-label">Spécialité</label>
+                        <div class="col-sm-10">
+                            <input type="text" class="form-control" name="competence" placeholder="Développeur, graphiste...">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-sm-offset-2 col-sm-10">
+                            <button type="submit" class="btn btn-default">Valider</button>
+                        </div>
+                    </div>
                 </div>
+            </form>
+
+            <div>
+
+                <?php if(!empty($datas)): ?>
+
+
+                    <table class="table table-hover">
+                        <tr>
+                            <td>  </td>
+                            <td> <strong> Nom </strong> </td>
+                            <td> <strong> Prénom </strong> </td>
+                            <td> <strong> Email </strong> </td>
+                            <td> <strong> Cursus </strong> </td>
+                            <td> <strong> Spécialité </strong> </td>
+                        </tr>
+                <?php foreach($datas as $data): ?>
+                        <tr>
+                            <td><?= $data->id; ?></td>
+                            <td><?= $data->firstname; ?></td>
+                            <td><?= $data->lastname; ?></td>
+                            <td><?= $data->email; ?></td>
+                            <td><?= $data->cursus; ?></td>
+                            <td><?= $data->competence; ?></td>
+                        </tr>
+                <?php endforeach?>
+                    </table>
+
+
+                <?php endif; ?>
+
             </div>
-        </div>
-        <br/>
-        <div class="form-horizontal">
-            <div class="form-group">
-                <label for="" class="col-sm-2 control-label">Email</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="email" placeholder="Email">
-                </div>
-            </div>
-            <div class="form-group">
-                <label for="" class="col-sm-2 control-label">Cursus</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="cursus" placeholder="L3 CDNL, L3 Info-com...">
-                </div>
-            </div>
 
-            <div class="form-group">
-                <label for="" class="col-sm-2 control-label">Spécialité</label>
-                <div class="col-sm-10">
-                    <input type="text" class="form-control" name="competence" placeholder="Développeur, graphiste...">
-                </div>
-            </div>
-
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <button type="submit" class="btn btn-default">Valider</button>
-                </div>
-            </div>
-        </div>
-    </form>
-
-    <div>
-        <?php
-            $req = $pdo->prepare("SELECT * FROM info_etu");
-            $req->execute();
-            $datas = $req->fetchAll(PDO::FETCH_OBJ);
-
-        ?>
-
-        <?php foreach($datas as $data): ?>
-
-            <p>
-                <strong>Nom : </strong><?= $data->firstname; ?>
-                <strong>Prénom : </strong><?= $data->lastname; ?>
-                <strong>Email : </strong><?= $data->email; ?>
-                <strong>cursus : </strong><?= $data->cursus; ?>
-                <strong>Spécialité : </strong><?= $data->competence; ?>
-
-            </p>
-        <?php endforeach?>
-    </div>
-
-</div><!-- /.container -->
+        </div><!-- /.container -->
 
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
 </body>
 </html>
