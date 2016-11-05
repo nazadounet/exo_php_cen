@@ -40,11 +40,6 @@ $req = $pdo->prepare("SELECT * FROM info_etu");
     $req->execute();
     $datas = $req->fetchAll(PDO::FETCH_ASSOC);
 
-$req = $pdo->prepare("SELECT id FROM info_etu");
-    $req->execute();
-    $etuId = $req->fetchAll(PDO::FETCH_ASSOC);
-debug($etuId[0]);
-
 
 ?>
 
@@ -144,7 +139,12 @@ debug($etuId[0]);
                             <td><?= $data['email']; ?></td>
                             <td><?= $data['cursus']; ?></td>
                             <td><?= $data['competence']; ?></td>
-                            <td><a href="function.php?id=<?= $data['id'] ?>">Delete</a></td>
+                            <td>
+                                <form method="post" action="delete.php" >
+                                    <input type="hidden" name="user_id" value= <?= $data['id']; ?> >
+                                    <input type="submit" name="Submit" value="Delete">
+                                </form>
+                            </td>
                         </tr>
                 <?php endforeach?>
                     </table>
